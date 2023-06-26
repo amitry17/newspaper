@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Post detail
+{% endblock title %}
+
+
+{% block content %}
+{% if post_link %}
+<h1>{{ post_link.title }}</h1>
+<div>
+  {{ post_link.timeDateCreation }}
+</div>
+<div>
+  {{ post_link.text|censor }}
+</div>
+<div>
+  Автор: {{ post_link.author }}, Рейтинг: {{ post_link.postRating }}, Категория: 
+  {% for cat in post_link.postcategory_set.all %}
+      {{ cat.category }}
+  {% endfor %}
+</div>
+{% else %}
+<h2>Новостей нет!</h2>
+{% endif %}
+{% endblock content %}

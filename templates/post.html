@@ -1,0 +1,38 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+    <h1>Все новости</h1>
+    <h2>{% current_time '%b %d %Y' %}</h2>
+    <div>{{posts_link | length}}</div>
+    <hr>
+    {% if posts_link %}
+        {% for post in posts_link %}
+
+            <h2>{{ post.title }}</h2>
+            <div>
+                {{ post.timeDateCreation }}
+            </div>
+            <div>
+                {{ post.text|truncatewords:20|censor}}
+                
+
+            </div>
+            <div>
+                Автор: {{ post.author }}, Рейтинг: {{ post.postRating }}, Категория: 
+                {% for cat in post.postcategory_set.all %}
+                    {{ cat.category }}
+                {% endfor %}
+            </div>
+                
+        {% endfor %}
+
+    {% else %}
+        <h2>Новостей нет!</h2>
+    {% endif %}
+{% endblock content %}
