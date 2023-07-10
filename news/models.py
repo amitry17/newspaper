@@ -4,7 +4,9 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from django.db.models import Max
+from django.urls import reverse
+
+
 # Create your models here.
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -40,7 +42,7 @@ class Post(models.Model):
     news = 'NW'
     
     POST_TYPE = [
-        (article, ' Статья'),
+        (article, 'Статья'),
         (news, 'Новости')
     ]
     
@@ -65,6 +67,9 @@ class Post(models.Model):
     
     def __str__(self):
         return f'{self.author}, {self.timeDateCreation}, {self.title}'
+    
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
     
     
     
