@@ -27,7 +27,8 @@
                 Автор: {{ post.author }}, Рейтинг: {{ post.postRating }}, Категория: 
                 {% for cat in post.postcategory_set.all %}
                     {{ cat.category }}
-                {% endfor %} Тип поста: {{ post.postType }} id:{{post.pk}}  
+                {% endfor %} Тип поста: {{ post.postType }} id:{{post.pk}} 
+                <a href="{{ post.pk }}">Читать далее</a>
             </div>
                 
         {% endfor %}

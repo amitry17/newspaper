@@ -7,7 +7,10 @@ from .filters import PostFilter
 from .forms import PostForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-# Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
 
 class PostList(ListView):
     model = Post
@@ -43,42 +46,50 @@ class PostDetail(DetailView):
     context_object_name = 'post_link'
 
 
-class NewsPostCreate(CreateView):
+class NewsPostCreate(LoginRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'news_post_create.html'
+    raise_exception = True
 
     def form_valid(self, form):
         newpost = form.save(commit=False)
         newpost.postType = 'NW'
         return super().form_valid(form)
 
-class NewsPostUpdate(UpdateView):
+class NewsPostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'news_post_edit.html'
+    raise_exception = True
 
-class NewsPostDelete(DeleteView):
+
+
+class NewsPostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'news_post_delete.html'
     success_url = reverse_lazy('posts')
+    raise_exception = True
 
-class ArticlePostCreate(CreateView):
+class ArticlePostCreate(LoginRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'article_post_create.html'
+    raise_exception = True
     
     def form_valid(self, form):
         newpost = form.save(commit=False)
         newpost.postType = 'AR'
         return super().form_valid(form)
 
-class ArticlePostUpdate(UpdateView):
+class ArticlePostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'article_post_edit.html'
+    raise_exception = True
 
-class ArticlePostDelete(DeleteView):
+class ArticlePostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'article_post_delete.html'
     success_url = reverse_lazy('posts')
+    raise_exception = True

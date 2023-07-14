@@ -28,20 +28,32 @@
                             <a class="nav-link" href="{% url 'posts' %}">Новости</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href = "{% url 'search' %}">Поиск</a>
+                        </li>
+                        {% if request.user.is_authenticated and is_authors %}
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'news_post_create' %}">Добавить новость</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'article_post_create' %}">Добавить статью</a>
                         </li>
+                        
+                        {% endif %}
+
+                        {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href = "{% url 'search' %}">Поиск</a>
+                            <a class="nav-link" href="/accounts/logout/">Выйти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/profile/">Profile</a>
+                            <a class="nav-link" href="" >Профиль: {{request.user.username}}</a>
                         </li>
+                        {% endif %}
+                        {% if request.user.is_not_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/categories/">Categories</a>
+                            <a class="nav-link" href="/accounts/signup/">Войти</a>
                         </li>
+                        {% endif %}
+                        
                     </ul>
                 </div>
 
