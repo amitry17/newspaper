@@ -10,8 +10,6 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
-
 class PostList(ListView):
     model = Post
     ordering = '-timeDateCreation'
@@ -19,12 +17,18 @@ class PostList(ListView):
     context_object_name = 'posts_link'
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
+
 class PostSearch(ListView):
     model = Post 
     template_name = 'news/search.html'
     context_object_name = 'posts_search'
     ordering = ['-timeDateCreation']
-
+    
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -35,6 +39,8 @@ class PostSearch(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
         return context
 
 
@@ -44,6 +50,12 @@ class PostDetail(DetailView):
     order = 'title'
     template_name = 'post_detail.html'
     context_object_name = 'post_link'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
 
 
 class NewsPostCreate(LoginRequiredMixin, CreateView):
@@ -56,12 +68,24 @@ class NewsPostCreate(LoginRequiredMixin, CreateView):
         newpost = form.save(commit=False)
         newpost.postType = 'NW'
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
 
 class NewsPostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'news_post_edit.html'
     raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
 
 
 
@@ -71,11 +95,23 @@ class NewsPostDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('posts')
     raise_exception = True
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
+
 class ArticlePostCreate(LoginRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'article_post_create.html'
     raise_exception = True
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
     
     def form_valid(self, form):
         newpost = form.save(commit=False)
@@ -88,8 +124,22 @@ class ArticlePostUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'article_post_edit.html'
     raise_exception = True
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
+
 class ArticlePostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'article_post_delete.html'
     success_url = reverse_lazy('posts')
     raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        context['is_authors'] = self.request.user.groups.filter(name='authors').exists()
+        return context
+
+

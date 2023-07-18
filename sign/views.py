@@ -6,6 +6,8 @@ from django.views.generic.edit import CreateView
 from .models import BaseRegisterForm
 from django.contrib.auth.decorators import login_required
 from news.models import Author
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class BaseRegisterView(CreateView):
@@ -28,3 +30,4 @@ def not_author(request):
     if request.user.groups.filter(name='authors').exists():
         authors_group.user_set.remove(user)
     return redirect('posts')
+
